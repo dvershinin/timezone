@@ -2,9 +2,10 @@
 
 use DateTime;
 use DateTimeZone;
+use Illuminate\Support\Facades\Form;
 
 class Timezone {
-	public $timezoneList =  array (
+	public static $timezoneList =  array (
 	    '(UTC-11:00) Midway Island' => 'Pacific/Midway',
 	    '(UTC-11:00) Samoa' => 'Pacific/Samoa',
 	    '(UTC-10:00) Hawaii' => 'Pacific/Honolulu',
@@ -82,15 +83,15 @@ class Timezone {
 	    '(UTC+03:00) Baghdad' => 'Asia/Baghdad',
 	    '(UTC+03:00) Kuwait' => 'Asia/Kuwait',
 	    '(UTC+03:00) Minsk' => 'Europe/Minsk',
+		'(UTC+03:00) Moscow' => 'Europe/Moscow',
+		'(UTC+03:00) St. Petersburg' => 'Europe/Moscow',				
 	    '(UTC+03:00) Nairobi' => 'Africa/Nairobi',
 	    '(UTC+03:00) Riyadh' => 'Asia/Riyadh',
 	    '(UTC+03:00) Volgograd' => 'Europe/Volgograd',
 	    '(UTC+03:30) Tehran' => 'Asia/Tehran',
 	    '(UTC+04:00) Abu Dhabi' => 'Asia/Muscat',
 	    '(UTC+04:00) Baku' => 'Asia/Baku',
-	    '(UTC+04:00) Moscow' => 'Europe/Moscow',
 	    '(UTC+04:00) Muscat' => 'Asia/Muscat',
-	    '(UTC+04:00) St. Petersburg' => 'Europe/Moscow',
 	    '(UTC+04:00) Tbilisi' => 'Asia/Tbilisi',
 	    '(UTC+04:00) Yerevan' => 'Asia/Yerevan',
 	    '(UTC+04:30) Kabul' => 'Asia/Kabul',
@@ -176,7 +177,7 @@ class Timezone {
 		}
 
 		$string = $string . $placeholder;
-		foreach ($this->timezoneList as $key => $value)
+		foreach (static::$timezoneList as $key => $value)
 		{
 			if ($selected == $value) {
 				$selectedString = "selected='" . $value . "'";
@@ -190,6 +191,21 @@ class Timezone {
 
 		return $string;
 	}
+	
+	/**
+	 * Create a select box field.
+	 *
+	 * @param  string  $name
+	 * @param  array   $list
+	 * @param  string  $selected
+	 * @param  array   $options
+	 * @return string
+	 */
+	public function select($name, $selected = null, $options = array())
+	{
+		return Form::select($name, array_flip(static::$timezoneList), $selected, $options);
+	}
+	
 
 	public function convertFromUTC($timestamp, $timezone, $format = 'Y-m-d H:i:s')
 	{
